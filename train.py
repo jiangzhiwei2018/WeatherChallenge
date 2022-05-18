@@ -110,6 +110,7 @@ def main(config_pth=r"configs/final_cfg.py"):
 
 if __name__ == '__main__':
     main()
+
     import numpy as np
     # im = np.random.random(size=(1, ))
     # forward_input_dict = {
