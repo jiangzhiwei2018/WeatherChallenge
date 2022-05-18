@@ -43,7 +43,7 @@ data = dict(
         type="WeatherDataset",
         dataset_folder_name="Train",
         pipeline=train_pipeline,
-        dataset_prefix=r"G:\LargeDataset\TIANCHI\weather",
+        dataset_prefix=r"G:/LargeDataset/TIANCHI/weather",
         data_type_name=("Precip", "Radar", "Wind"),
         test_mode=False
     ),
@@ -51,7 +51,7 @@ data = dict(
         type="WeatherDataset",
         dataset_folder_name="TestA",
         pipeline=val_pipeline,
-        dataset_prefix=r"G:\LargeDataset\TIANCHI\weather",
+        dataset_prefix=r"G:/LargeDataset/TIANCHI/weather",
         data_type_name=("Precip", "Radar", "Wind"),
         test_mode=False
     ),
@@ -59,7 +59,7 @@ data = dict(
         type="WeatherDataset",
         dataset_folder_name="TestB1",
         pipeline=test_pipeline,
-        dataset_prefix=r"G:\LargeDataset\TIANCHI\weather",
+        dataset_prefix=r"G:/LargeDataset/TIANCHI/weather",
         data_type_name=("Precip", "Radar", "Wind"),
         test_mode=True
     )

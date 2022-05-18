@@ -3,6 +3,7 @@ import copy
 import os
 import os.path as osp
 import time
+import warnings
 import mmcv
 import torch
 import torch.distributed as dist
@@ -22,6 +23,12 @@ from mmweather.utils import collect_env, get_root_logger, setup_multi_processes
 # os.environ['WORLD_SIZE'] = '1'
 # os.environ['MASTER_ADDR'] = 'localhost'
 # os.environ['MASTER_PORT'] = '5678'
+def parse_args():
+    parser = argparse.ArgumentParser(description='AI weather')
+    parser.add_argument('--dataset_prefix', help='dataset root', default=r"G:/LargeDataset/TIANCHI/weather")
+    parser.add_argument('--seed', help='seed', default=2022)
+    args = parser.parse_args()
+    return args
 
 
 def main(config_pth=r"configs/final_cfg.py"):
@@ -29,17 +36,23 @@ def main(config_pth=r"configs/final_cfg.py"):
 
     :return:
     """
+    args = parse_args()
     cfg = Config.fromfile(config_pth)
+    dataset_prefix = args.dataset_prefix
+    cfgdata = cfg.data
+    for mod in ('train', 'val', 'test'):
+        if cfgdata.get(mod, None) is not None:
+            cfgdata[mod] = dataset_prefix
+    cfg.data = cfgdata
     # datasets = build_dataset(cfg.data.test)
     # data_ld = build_dataloader(datasets,
     #                            samples_per_gpu=4,
     #                            workers_per_gpu=1, shuffle=False)
-
     # work_dir = os.path.join("./work_dirs")
     # return
     setup_multi_processes(cfg)
     deterministic = True
-    seed = 2022
+    seed = args.seed
     diff_seed = False
     distributed = False
     torch.backends.cudnn.benchmark = deterministic
@@ -110,7 +123,6 @@ def main(config_pth=r"configs/final_cfg.py"):
 
 if __name__ == '__main__':
     main()
-
     import numpy as np
     # im = np.random.random(size=(1, ))
     # forward_input_dict = {
