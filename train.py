@@ -125,9 +125,24 @@ def main(config_pth=r"configs/final_cfg.py"):
     # CosineRestartLrUpdaterHook
 
 
+import segmentation_models_pytorch as smp
+
+
 if __name__ == '__main__':
-    main()
-    import numpy as np
+    unet_pp = smp.UnetPlusPlus(
+        encoder_name="resnet34",  # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
+        encoder_weights=None,  # use `imagenet` pre-trained weights for encoder initialization
+        in_channels=60,  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
+        classes=60
+    )
+    unet = smp.Unet(
+        encoder_name="resnet34",  # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
+        encoder_weights=None,  # use `imagenet` pre-trained weights for encoder initialization
+        in_channels=60,  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
+        classes=60
+    )
+    x = torch.rand(size=(4, 60, 480, 560))
+    # main()
     # im = np.random.random(size=(1, ))
     # forward_input_dict = {
     #     "Precip": torch.rand(size=(4, 20, 1, 480, 560)).cuda(),

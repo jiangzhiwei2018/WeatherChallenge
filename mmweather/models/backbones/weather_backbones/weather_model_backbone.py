@@ -10,6 +10,11 @@ from mmweather.models.common import (PixelShufflePack, ResidualBlockNoBN, flow_w
 from mmweather.models.registry import BACKBONES
 from mmweather.utils import get_root_logger
 from mmweather.models.builder import build_backbone
+from segmentation_models_pytorch.encoders import get_preprocessing_fn
+import segmentation_models_pytorch as smp
+
+smp.UnetPlusPlus
+smp.Unet
 
 
 class BasicWeatherGenerator(nn.Module):
