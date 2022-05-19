@@ -13,6 +13,7 @@ from mmweather.models import build_model
 from mmweather.utils import setup_multi_processes
 from mmcv.utils import TORCH_VERSION, digit_version
 from mmweather.models.backbones.weather_backbones.weather_model_backbone import BasicWeather
+from mmweather.utils.misc import find_best_checkpoint
 
 if (TORCH_VERSION == 'parrots'
         or digit_version(TORCH_VERSION) < digit_version('1.1')):
@@ -31,12 +32,7 @@ else:
             '(applicable to PyTorch 1.1 or higher)')
 
 
-def main(config_pth=r"configs\final_cfg.py", checkpoint=r'work_dirs\weather_Precip_Radar_Wind_bs4'
-                                                        r'\ep300_adam_lr1e-4_cosinR300'
-                                                        r'\BasicWeather_UnetGenerator_DCNv2_interpolate_MSELoss'
-                                                        r'\latest.pth',
-         save_eval_out=True):
-    assert checkpoint is not None
+def main(config_pth=r"configs/final_cfg.py", save_eval_out=True):
     cfg = Config.fromfile(config_pth)
     deterministic = True
     setup_multi_processes(cfg)
@@ -98,19 +94,12 @@ def main(config_pth=r"configs\final_cfg.py", checkpoint=r'work_dirs\weather_Prec
     #     print(val.size())
     # return
     work_dir = cfg.get("work_dir", "./")
-    test_save_dir = os.path.join(work_dir, "test_results")
+    checkpoint = find_best_checkpoint(work_dir)
+    assert checkpoint is not None
+    test_save_dir = os.path.join('./', "test_results")
     os.makedirs(test_save_dir, exist_ok=True)
-
     if not distributed:
-        # out_checkpoint = CheckpointLoader.load_checkpoint(checkpoint, 'cpu')
-        # print(out_checkpoint)
-        # writers = SummaryWriter(r"E:\MyData\PostGraduate\PythonProject\mmVFISR\work_dirs\test_cfg\tf_logs")
-        # return
         out_checkpoint = load_checkpoint(model, checkpoint, map_location='cpu')
-        # writers = SummaryWriter(
-        #     r"work_dirs\ec_t2m_64x64_hw1_frame8_random_crop"
-        #     r"\ep300_adam_lr1e-4_cosinR300\ORGSlowMo_normal-IN_MyPixelWiseLossVFI\tf_test_figure_logs")
-        # return
         model = MMDataParallel(model, device_ids=[0])
         outputs = single_gpu_test(
             model,
@@ -122,6 +111,7 @@ def main(config_pth=r"configs\final_cfg.py", checkpoint=r'work_dirs\weather_Prec
             summary_writer_tag="test_final", iteration=0,
             test_val_steps=None
         )
+
         return
     else:
         raise ValueError("only support non distributed")

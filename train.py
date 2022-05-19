@@ -27,8 +27,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description='AI weather')
     parser.add_argument('--dataset_prefix', help='dataset root', default=r"G:/LargeDataset/TIANCHI/weather")
     parser.add_argument('--seed', help='seed', default=2022)
-    parser.add_argument('--samples_per_gpu', help='samples_per_gpu', default=2)
-    parser.add_argument('--workers_per_gpu', help='workers_per_gpu', default=4)
+    parser.add_argument('--samples_per_gpu', help='samples_per_gpu', default=2, type=int)
+    parser.add_argument('--workers_per_gpu', help='workers_per_gpu', default=4, type=int)
     args = parser.parse_args()
     return args
 
