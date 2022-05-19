@@ -42,7 +42,7 @@ def main(config_pth=r"configs/final_cfg.py"):
     cfgdata = cfg.data
     for mod in ('train', 'val', 'test'):
         if cfgdata.get(mod, None) is not None:
-            cfgdata[mod] = dataset_prefix
+            cfgdata[mod]["dataset_prefix"] = dataset_prefix
     cfg.data = cfgdata
     # datasets = build_dataset(cfg.data.test)
     # data_ld = build_dataloader(datasets,

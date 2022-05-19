@@ -21,7 +21,7 @@ class BaseWeatherDataset(BaseDataset):
 
         return self.pipeline(results)
 
-    def evaluate(self, results, logger=None):
+    def evaluate(self, results, logger=None, **kwargs):
         """Evaluate with different metrics.
 
         Args:
