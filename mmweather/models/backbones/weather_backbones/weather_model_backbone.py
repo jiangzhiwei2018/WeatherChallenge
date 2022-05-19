@@ -13,14 +13,12 @@ from mmweather.models.builder import build_backbone
 from segmentation_models_pytorch.encoders import get_preprocessing_fn
 import segmentation_models_pytorch as smp
 
-smp.UnetPlusPlus
-smp.Unet
-
 
 class BasicWeatherGenerator(nn.Module):
     def __init__(self, in_channels, out_channels, generator_backbone_cfg=dict(type="UnetGenerator"), **kwargs):
         super(BasicWeatherGenerator, self).__init__()
-        generator_backbone_cfg.update(**kwargs, in_channels=in_channels, out_channels=out_channels)
+
+        generator_backbone_cfg.update(in_channels=in_channels, **kwargs)
         self.model = build_backbone(generator_backbone_cfg)
 
     def forward(self, inx, **kwargs):

@@ -117,7 +117,6 @@ class UnetGenerator(nn.Module):
         Returns:
             Tensor: Forward results.
         """
-        h, w = x.shape[-2:]
         return F.interpolate(self.model(x), size=(h, w), align_corners=False, mode='bilinear')
 
     def init_weights(self, pretrained=None, strict=True):

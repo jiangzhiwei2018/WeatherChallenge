@@ -238,12 +238,6 @@ class UnetSkipConnectionBlock(nn.Module):
             return self.model(x)
         model_out = self.model(x)
         # add skip connections
-        h, w = x.shape[-2:]
-        model_out_h, model_out_w = model_out.shape[-2:]
-        h = max(h, model_out_h)
-        w = max(w, model_out_w)
-        x = F.interpolate(x, size=(h, w), align_corners=False, mode='bilinear')
-        model_out = F.interpolate(model_out, size=(h, w), align_corners=False, mode='bilinear')
         return torch.cat([x, model_out], 1)
 
 
