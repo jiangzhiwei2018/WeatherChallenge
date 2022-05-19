@@ -27,6 +27,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description='AI weather')
     parser.add_argument('--dataset_prefix', help='dataset root', default=r"G:/LargeDataset/TIANCHI/weather")
     parser.add_argument('--seed', help='seed', default=2022)
+    parser.add_argument('--samples_per_gpu', help='samples_per_gpu', default=2)
+    parser.add_argument('--workers_per_gpu', help='workers_per_gpu', default=4)
     args = parser.parse_args()
     return args
 
@@ -40,6 +42,8 @@ def main(config_pth=r"configs/final_cfg.py"):
     cfg = Config.fromfile(config_pth)
     dataset_prefix = args.dataset_prefix
     cfgdata = cfg.data
+    cfgdata["train_dataloader"]["samples_per_gpu"] = args.samples_per_gpu
+    cfgdata["workers_per_gpu"] = args.workers_per_gpu
     for mod in ('train', 'val', 'test'):
         if cfgdata.get(mod, None) is not None:
             cfgdata[mod]["dataset_prefix"] = dataset_prefix
