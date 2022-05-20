@@ -5,7 +5,7 @@ schedule_work_name = '{{fileBasenameNoExtension}}'
 optimizer = dict(
     generator=dict(
         type='Adam',
-        lr=1e-4,
+        lr=1e-3,
         betas=(0.9, 0.99)
     )
 )
@@ -18,11 +18,10 @@ lr_config = dict(
     # warmup_iters=1000,
     # warmup_ratio=0.1,
     # warmup_by_epoch=False,
-
     policy='CosineRestart',
     by_epoch=True,
-    periods=[300],
-    restart_weights=[1],
+    periods=[25, 25, 25, 25],
+    restart_weights=[1, 1, 1, 1],
     min_lr=0.)
 
-runner = dict(type='EpochBasedRunner', max_epochs=300)
+runner = dict(type='EpochBasedRunner', max_epochs=100)
