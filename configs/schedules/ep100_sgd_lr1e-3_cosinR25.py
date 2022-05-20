@@ -22,8 +22,8 @@ lr_config = dict(
 
     policy='CosineRestart',
     by_epoch=True,
-    periods=[100, 100, 100],
-    restart_weights=[1, 1, 1],
+    periods=[25, 25, 25, 25],
+    restart_weights=[1, 1, 1, 1],
     min_lr=0.)
 
-runner = dict(type='EpochBasedRunner', max_epochs=300)
+runner = dict(type='EpochBasedRunner', max_epochs=100)

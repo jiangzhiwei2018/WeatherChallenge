@@ -3,7 +3,7 @@ base_file_list = [
     './models/weather_pan_net.py',
     # './models/weather_model.py',
     # './models/weather_model_resnet.py',
-    './schedules/ep300_adam_lr1e-4_cosinR300.py',
+    './schedules/ep100_sgd_lr1e-3_cosinR25.py',
     './datasets/weather_datasets.py'
 ]
 
