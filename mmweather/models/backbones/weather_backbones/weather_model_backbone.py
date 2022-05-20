@@ -32,9 +32,12 @@ class BasicWeatherGenerator(nn.Module):
 
 @BACKBONES.register_module()
 class BasicWeather(nn.Module):
-    def __init__(self, input_keys=("Precip", "Radar", "Wind"), output_keys=("Precip", "Radar", "Wind"),
+    def __init__(self, down_hw=(256, 512),
+                 input_keys=("Precip", "Radar", "Wind"), output_keys=("Precip", "Radar", "Wind"),
                  generator_backbone_cfg=dict(type="UnetGenerator"), **kwargs):
         super(BasicWeather, self).__init__()
+        self.down_hw = down_hw
+        self.resize_hw = nn.Upsample(size=down_hw, mode="bilinear", align_corners=True)
         in_channels = len(input_keys) * 20
         out_channels = len(output_keys) * 20
         self.input_keys = input_keys
@@ -48,7 +51,10 @@ class BasicWeather(nn.Module):
         :return:
         """
         n, t, c, h, w = inx.size()
+        # combine_inx =
         combine_inx = inx.flatten(1, 2)
+        # h_new, w_new = self.down_hw
+        # inx_down = self.resize_hw(inx.flatten(0, 1)).unflatten(0, (n, t))
         # print(combine_inx.size())
         res = self.model(combine_inx)
         return {"output": res.unflatten(1, (t, c))}

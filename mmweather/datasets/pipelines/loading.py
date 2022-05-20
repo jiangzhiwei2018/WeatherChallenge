@@ -22,11 +22,13 @@ def img_read(frame, factor):
     :param factor:
     :return:
     """
-    image = np.array(imread(frame)/255*factor, dtype=np.float32)[None, None]
+    image = np.array(imread(frame), dtype=np.float32)[None, None]/255*factor
     return image
 
 
-def img_read_list(frame_list, factor):
+def img_read_list(frame_list, factor=1.):
+    if isinstance(frame_list, np.ndarray):
+        return frame_list.astype(np.float32)/255.*factor
     img_list = []
     for frame in frame_list:
         img_list.append(img_read(frame, factor))

@@ -48,7 +48,8 @@ def main(config_pth=r"configs/final_cfg.py"):
         if cfgdata.get(mod, None) is not None:
             cfgdata[mod]["dataset_prefix"] = dataset_prefix
     cfg.data = cfgdata
-    # datasets = build_dataset(cfg.data.test)
+    # datasets = build_dataset(cfg.data.train)
+    # return
     # data_ld = build_dataloader(datasets,
     #                            samples_per_gpu=4,
     #                            workers_per_gpu=1, shuffle=False)
@@ -125,8 +126,19 @@ def main(config_pth=r"configs/final_cfg.py"):
     # CosineRestartLrUpdaterHook
 
 
-if __name__ == '__main__':
+import segmentation_models_pytorch as smp
 
+
+if __name__ == '__main__':
+    # m = smp.PAN(
+    #     in_channels=60,
+    #     classes=60,
+    #     encoder_weights=None,
+    #     upsampling=0
+    # ).cuda()
+    # inx = torch.rand(size=(8, 60, 480, 560)).cuda()
+    # o = m(inx)
+    # print(o.shape)
     main()
     # im = np.random.random(size=(1, ))
     # forward_input_dict = {

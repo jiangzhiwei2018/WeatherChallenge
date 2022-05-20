@@ -1,10 +1,33 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import os
 import os.path as osp
+
+import mmcv
 import pandas as pd
 from .base_weather_dataset import BaseWeatherDataset
 from .registry import DATASETS
 import numpy as np
+from imageio import imread
+
+
+def img_read(frame, factor):
+    """
+
+    :param frame:
+    :param factor:
+    :return:
+    """
+    image = np.array(imread(frame), dtype=np.uint8)[None, None]
+    return image
+
+
+def img_read_list(frame_list, factor=1.):
+    # return frame_list
+    img_list = []
+    for frame in frame_list:
+        img_list.append(img_read(frame, factor))
+    img_list = np.concatenate(img_list, axis=0)
+    return img_list
 
 
 def parse_test(test_fold):
@@ -46,9 +69,9 @@ class WeatherDataset(BaseWeatherDataset):
         data_infos = []
         if not self.test_mode:
             csv_df = np.array(pd.read_csv(self.csv_pth, header=None))
-            input_arr = csv_df[:, :20]
-            out_arr = csv_df[:, 20:]
-            data_size = len(csv_df)
+            input_arr = csv_df[::2, :20]
+            out_arr = csv_df[::2, 20:]
+            data_size = len(input_arr)
             data_body = {}
             for key in self.data_type_name:
                 n_data_fold = os.path.join(self.dataset_folder, key) + os.sep + f"{key}_".lower()
@@ -60,6 +83,7 @@ class WeatherDataset(BaseWeatherDataset):
                 input_arr = parse_test(os.path.join(self.dataset_folder, key))
                 data_body[key] = {"input_arr":  input_arr}
                 data_size = len(input_arr)
+        prog_bar = mmcv.ProgressBar(data_size)
         for i in range(data_size):
             data_info = dict(num_range=i+1)
             for key in self.data_type_name:
@@ -67,6 +91,8 @@ class WeatherDataset(BaseWeatherDataset):
                 assert n_key_data_info
                 input_arr = n_key_data_info["input_arr"]
                 output_arr = n_key_data_info.get("output_arr", None)
-                data_info[key] = [input_arr[i], output_arr[i] if output_arr is not None else None]
+                data_info[key] = [img_read_list(input_arr[i]), img_read_list(output_arr[i])
+                if output_arr is not None else None]
+            prog_bar.update(1)
             data_infos.append(data_info)
         return data_infos
