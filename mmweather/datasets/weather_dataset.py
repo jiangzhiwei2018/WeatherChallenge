@@ -22,7 +22,7 @@ def img_read(frame, factor):
 
 
 def img_read_list(frame_list, factor=1.):
-    # return frame_list
+    return frame_list
     img_list = []
     for frame in frame_list:
         img_list.append(img_read(frame, factor))
