@@ -96,7 +96,7 @@ def main(config_pth=r"configs/final_cfg.py", save_eval_out=True):
     work_dir = cfg.get("work_dir", "./")
     checkpoint = find_best_checkpoint(work_dir)
     assert checkpoint is not None
-    test_save_dir = os.path.join(work_dir, "test_results")
+    test_save_dir = os.path.join('./', "test_results")
     os.makedirs(test_save_dir, exist_ok=True)
     if not distributed:
         out_checkpoint = load_checkpoint(model, checkpoint, map_location='cpu')
