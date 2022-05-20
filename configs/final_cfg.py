@@ -1,7 +1,6 @@
 from mmcv import Config
 
 
-
 base_info = Config.fromfile("{{ fileDirname }}/base_cfg.py")
 
 final_model_name = base_info.model_work_name
